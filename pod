@@ -1,0 +1,241 @@
+[root@tina-bcmt-control-edge-01 ~]$ kubectl get all
+NAME                 DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
+deploy/cbura-cburm   1         1         1            0           10m
+deploy/cburm         1         1         1            0           4d
+
+NAME                        DESIRED   CURRENT   READY     AGE
+rs/cbura-cburm-58cf88fffc   1         1         0         10m
+rs/cburm-849bd5f97c         1         1         0         4d
+
+NAME                 DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
+deploy/cbura-cburm   1         1         1            0           10m
+deploy/cburm         1         1         1            0           4d
+
+NAME                        DESIRED   CURRENT   READY     AGE
+rs/cbura-cburm-58cf88fffc   1         1         0         10m
+rs/cburm-849bd5f97c         1         1         0         4d
+
+NAME                              READY     STATUS             RESTARTS   AGE
+po/cbura-cburm-58cf88fffc-mrkfl   0/1       ImagePullBackOff   0          10m
+po/cburm-849bd5f97c-qvjnp         0/1       ImagePullBackOff   0          4d
+
+NAME              TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE
+svc/cbura-cburm   ClusterIP   10.254.212.149   <none>        80/TCP    10m
+svc/cburm         ClusterIP   10.254.28.202    <none>        80/TCP    4d
+svc/kubernetes    ClusterIP   10.254.0.1       <none>        443/TCP   4d
+
+=======================================================================================================================
+
+[root@tina-bcmt-control-edge-01 ~]$ kubectl get po
+NAME                           READY     STATUS             RESTARTS   AGE
+cbura-cburm-58cf88fffc-mrkfl   0/1       ImagePullBackOff   0          11m
+cburm-849bd5f97c-qvjnp         0/1       ErrImagePull       0          4d
+
+=======================================================================================================================
+
+[root@tina-bcmt-control-edge-01 ~]$ kubectl get po cburm-849bd5f97c-qvjnp -o yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: 2018-05-11T08:15:13Z
+  generateName: cburm-849bd5f97c-
+  labels:
+    app: cburm
+    pod-template-hash: "4056819537"
+    release: cburm
+  name: cburm-849bd5f97c-qvjnp
+  namespace: default
+  ownerReferences:
+  - apiVersion: extensions/v1beta1
+    blockOwnerDeletion: true
+    controller: true
+    kind: ReplicaSet
+    name: cburm-849bd5f97c
+    uid: 6e50a3f6-54f3-11e8-8065-fa163efc12bd
+  resourceVersion: "865414"
+  selfLink: /api/v1/namespaces/default/pods/cburm-849bd5f97c-qvjnp
+  uid: 6e52a369-54f3-11e8-8065-fa163efc12bd
+spec:
+  containers:
+  - image: nginx:stable
+    imagePullPolicy: IfNotPresent
+    livenessProbe:
+      failureThreshold: 3
+      httpGet:
+        path: /
+        port: http
+        scheme: HTTP
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 1
+    name: cburm
+    ports:
+    - containerPort: 80
+      name: http
+      protocol: TCP
+    readinessProbe:
+      failureThreshold: 3
+      httpGet:
+        path: /
+        port: http
+        scheme: HTTP
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 1
+    resources: {}
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: default-token-blt9c
+      readOnly: true
+  dnsPolicy: ClusterFirst
+  nodeName: tina-bcmt-worker-01
+  restartPolicy: Always
+  schedulerName: default-scheduler
+  securityContext: {}
+  serviceAccount: default
+  serviceAccountName: default
+  terminationGracePeriodSeconds: 30
+  volumes:
+  - name: default-token-blt9c
+    secret:
+      defaultMode: 420
+      secretName: default-token-blt9c
+status:
+  conditions:
+  - lastProbeTime: null
+    lastTransitionTime: 2018-05-11T08:15:13Z
+    status: "True"
+    type: Initialized
+  - lastProbeTime: null
+    lastTransitionTime: 2018-05-11T08:15:13Z
+    message: 'containers with unready status: [cburm]'
+    reason: ContainersNotReady
+    status: "False"
+    type: Ready
+  - lastProbeTime: null
+    lastTransitionTime: 2018-05-11T08:15:13Z
+    status: "True"
+    type: PodScheduled
+  containerStatuses:
+  - image: nginx:stable
+    imageID: ""
+    lastState: {}
+    name: cburm
+    ready: false
+    restartCount: 0
+    state:
+      waiting:
+        message: Back-off pulling image "nginx:stable"
+        reason: ImagePullBackOff
+  hostIP: 10.10.10.12
+  phase: Pending
+  podIP: 192.168.1.1
+  qosClass: BestEffort
+  startTime: 2018-05-11T08:15:13Z
+  
+=========================================================================================================================
+  
+  [root@tina-bcmt-control-edge-01 ~]$ kubectl get po cbura-cburm-58cf88fffc-mrkfl -o yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: 2018-05-16T06:58:44Z
+  generateName: cbura-cburm-58cf88fffc-
+  labels:
+    app: cburm
+    pod-template-hash: "1479449997"
+    release: cbura
+  name: cbura-cburm-58cf88fffc-mrkfl
+  namespace: default
+  ownerReferences:
+  - apiVersion: extensions/v1beta1
+    blockOwnerDeletion: true
+    controller: true
+    kind: ReplicaSet
+    name: cbura-cburm-58cf88fffc
+    uid: 931e46c5-58d6-11e8-8065-fa163efc12bd
+  resourceVersion: "865003"
+  selfLink: /api/v1/namespaces/default/pods/cbura-cburm-58cf88fffc-mrkfl
+  uid: 932532a8-58d6-11e8-8065-fa163efc12bd
+spec:
+  containers:
+  - image: nginx:stable
+    imagePullPolicy: IfNotPresent
+    livenessProbe:
+      failureThreshold: 3
+      httpGet:
+        path: /
+        port: http
+        scheme: HTTP
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 1
+    name: cburm
+    ports:
+    - containerPort: 80
+      name: http
+      protocol: TCP
+    readinessProbe:
+      failureThreshold: 3
+      httpGet:
+        path: /
+        port: http
+        scheme: HTTP
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 1
+    resources: {}
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: default-token-blt9c
+      readOnly: true
+  dnsPolicy: ClusterFirst
+  nodeName: tina-bcmt-worker-01
+  restartPolicy: Always
+  schedulerName: default-scheduler
+  securityContext: {}
+  serviceAccount: default
+  serviceAccountName: default
+  terminationGracePeriodSeconds: 30
+  volumes:
+  - name: default-token-blt9c
+    secret:
+      defaultMode: 420
+      secretName: default-token-blt9c
+status:
+  conditions:
+  - lastProbeTime: null
+    lastTransitionTime: 2018-05-16T06:58:44Z
+    status: "True"
+    type: Initialized
+  - lastProbeTime: null
+    lastTransitionTime: 2018-05-16T06:58:44Z
+    message: 'containers with unready status: [cburm]'
+    reason: ContainersNotReady
+    status: "False"
+    type: Ready
+  - lastProbeTime: null
+    lastTransitionTime: 2018-05-16T06:58:44Z
+    status: "True"
+    type: PodScheduled
+  containerStatuses:
+  - image: nginx:stable
+    imageID: ""
+    lastState: {}
+    name: cburm
+    ready: false
+    restartCount: 0
+    state:
+      waiting:
+        message: Back-off pulling image "nginx:stable"
+        reason: ImagePullBackOff
+  hostIP: 10.10.10.12
+  phase: Pending
+  podIP: 192.168.1.18
+  qosClass: BestEffort
+  startTime: 2018-05-16T06:58:44Z
+
